@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your source code repository
+                git 'https://github.com/yadagirihari/kube-react.git'
+            }
+        }
+        
+        stage('Install dependencies') {
+            steps {
+                // Install Node.js and npm
+                // Adjust the version numbers as needed
+                sh 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -'
+                sh 'sudo apt-get install -y nodejs'
+                
+                // Install project dependencies
+                sh 'npm install'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Build the React.js application
+                sh 'npm run build'
+            }
+        }
+        
+        stage('Archive build artifacts') {
+            steps {
+                // Archive the build artifacts (e.g., build directory)
+                archiveArtifacts 'build/**'
+            }
+        }
+    }
+}
